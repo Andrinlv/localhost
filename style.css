@@ -1,0 +1,180 @@
+:root {
+    --primary-text-color: #e0f7fa; 
+    --secondary-text-color: #b0bec5;
+    --glass-bg-color: rgba(255, 255, 255, 0.1); /* Transparenz ist wichtig für den Video-Effekt */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+    --glass-blur: blur(15px); /* Sorgt für die Unschärfe des Videos hinter der Box */
+    --button-color: #5e8e8e; 
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* NEU: Styling für das Hintergrund-Video */
+#bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1; /* Schiebt das Video ganz nach hinten */
+    object-fit: cover; /* Sorgt dafür, dass das Video den Bildschirm füllt ohne Verzerrung */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Verhindert Scrollbalken durch das Video */
+    /* HINWEIS: background-image wurde entfernt */
+}
+
+.main-glass-container {
+    width: 80%;
+    max-width: 1000px;
+    padding: 40px;
+    background: var(--glass-bg-color);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 30px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    text-align: center;
+    color: var(--primary-text-color);
+}
+
+/* --- Der Rest des CSS bleibt identisch wie zuvor --- */
+.main-title {
+    font-size: 3em;
+    font-weight: 500;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.sub-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    color: var(--secondary-text-color);
+    font-weight: 300;
+}
+
+.badges-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.glass-badge {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: var(--glass-border);
+    border-radius: 20px;
+    font-size: 0.9em;
+    backdrop-filter: blur(5px);
+}
+
+.content-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 20px;
+}
+
+.login-container {
+    width: 350px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.07);
+    border: var(--glass-border);
+    border-radius: 25px;
+    text-align: left;
+}
+
+.login-container h2 {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 10px;
+    color: var(--primary-text-color);
+    font-family: inherit;
+    outline: none;
+}
+
+.login-container input::placeholder {
+    color: rgba(224, 247, 250, 0.6);
+}
+
+.login-container button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--button-color);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #4d7a7a;
+}
+
+.settings-container {
+    display: flex;
+    align-items: flex-end;
+}
+
+.settings-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: var(--glass-border);
+    color: var(--primary-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+}
+
+.settings-button:hover {
+    transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+    .main-glass-container {
+        width: 95%;
+        padding: 20px;
+    }
+    .main-title { font-size: 2em; }
+    .content-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+    .login-container { width: 100%; }
+    .settings-container {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
