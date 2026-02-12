@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glass Forest Template</title>
+    <title>Loginpanel</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -15,24 +15,30 @@
     </video>
 
     <div class="main-glass-container">
-        <h1 class="main-title">Liebesarchiv</h1>
+        <h1 class="main-title">Archiv</h1>
         <div class="sub-nav">
             <span>Santts</span>
             <span>Festairy</span>
         </div>
 
         <div class="badges-container">
-            <div class="glass-badge">backdrop filter #255, 10px</div>
-            <div class="glass-badge">color #E0F706</div>
-            <div class="glass-badge">border filter solid 0.4px</div>
+            <div class="glass-badge" data-fun="Wo ist meine Brille? 👓">
+                backdrop filter #255, 10px
+            </div> 
+            <div class="glass-badge" data-fun="Sauer macht lustig! 🍋">
+                color #E0F706
+            </div>
+            <div class="glass-badge" data-fun="Vorsicht, scharfe Kante! 🔪">
+                border filter solid 0.4px
+            </div>
         </div>
 
         <div class="content-row">
             <div class="login-container">
-                <h2>Login Form</h2>
-                <form>
-                    <input type="text" placeholder="Benutzername">
-                    <input type="password" placeholder="Passwort">
+                <h2>Login</h2>
+                <form id="login-form">
+                    <input type="text" id="username" placeholder="Benutzername" required>
+                    <input type="password" id="password" placeholder="Passwort" required>
                     <button type="submit">Submit</button>
                 </form>
             </div>
@@ -47,5 +53,7 @@
             </div>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
