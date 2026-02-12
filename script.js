@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const username = usernameInput.value;
         const password = passwordInput.value;
 
-        if (username === "test" && password === "1234") {
+        if (username === "Louisa" && password === "IchLiebeDich") {
             window.location.href = "https://andrinlv.github.io/valentinesday/";
         } else {
             alert("Benutzername oder Passwort ist falsch.");
