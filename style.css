@@ -5,6 +5,19 @@
     --glass-border: 1px solid rgba(255, 255, 255, 0.2);
     --glass-blur: blur(15px);
     --button-color: #5e8e8e; 
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --placeholder-color: rgba(224, 247, 250, 0.6);
+}
+
+/* --- LIGHT MODE (SCHWARZE SCHRIFT) --- */
+body.light-mode {
+    --primary-text-color: #000000; /* Tiefschwarz */
+    --secondary-text-color: #333333; /* Dunkelgrau */
+    --glass-bg-color: rgba(255, 255, 255, 0.6); /* Helleres Glas */
+    --glass-border: 1px solid rgba(0, 0, 0, 0.1); /* Dunklerer Rand */
+    --button-color: #4a90e2; 
+    --input-bg: rgba(0, 0, 0, 0.05); /* Eingabefelder leicht grau */
+    --placeholder-color: rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -13,7 +26,6 @@
     box-sizing: border-box;
 }
 
-/* Hintergrund-Video fixiert */
 #bg-video {
     position: fixed;
     right: 0;
@@ -27,7 +39,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     min-height: 100vh;
-    min-height: 100dvh; /* Besser für Mobile Browser */
+    min-height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,6 +47,34 @@ body {
     overflow-x: hidden;
 }
 
+/* --- SETTINGS BUTTON (OBEN RECHTS FIXIERT) --- */
+.settings-button {
+    position: fixed; /* Klebt am Bildschirmrand */
+    top: 20px;
+    right: 20px;
+    z-index: 100; /* Über allem anderen */
+    
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--glass-bg-color);
+    border: var(--glass-border);
+    color: var(--primary-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.settings-button:hover {
+    transform: rotate(90deg) scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- HAUPT CONTAINER --- */
 .main-glass-container {
     width: 80%;
     max-width: 1000px;
@@ -47,7 +87,7 @@ body {
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     text-align: center;
     color: var(--primary-text-color);
-    margin: 20px; 
+    margin: 60px 20px 20px 20px; /* Oben Platz lassen für Settings Button auf Mobile */
 }
 
 .main-title {
@@ -66,6 +106,7 @@ body {
     font-weight: 300;
 }
 
+/* --- BADGES (MOBILE OPTIMIERT) --- */
 .badges-container {
     display: flex;
     justify-content: center;
@@ -74,7 +115,6 @@ body {
     flex-wrap: wrap; 
 }
 
-/* --- Interaktive Badges (Neu) --- */
 .glass-badge {
     padding: 10px 20px;
     background: rgba(255, 255, 255, 0.05);
@@ -82,17 +122,15 @@ body {
     border-radius: 20px;
     font-size: 0.9em;
     backdrop-filter: blur(5px);
-    
-    /* Animation Properties */
     position: relative;
     cursor: help; 
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy Effekt */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     overflow: hidden;
-    min-width: 180px; /* Damit der Badge nicht zuckt */
+    min-width: 180px; 
     text-align: center;
+    color: var(--primary-text-color); /* Wichtig für Light Mode */
 }
 
-/* Der Text für den Hover Effekt */
 .glass-badge::after {
     content: attr(data-fun);
     position: absolute;
@@ -102,35 +140,39 @@ body {
     width: 100%;
     opacity: 0;
     font-weight: bold;
-    color: #fff;
+    color: #fff; /* Emoji Farbe bleibt weiß oder kann angepasst werden */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5); /* Damit man es auch auf hellem Grund liest */
     transition: all 0.3s ease;
 }
 
-/* Hover Status */
-.glass-badge:hover {
+/* Hover UND Active (für Touchscreens) */
+.glass-badge:hover, 
+.glass-badge:active {
     transform: scale(1.1) rotate(-3deg);
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 15px rgba(224, 247, 6, 0.3);
-    color: transparent; /* Versteckt den normalen Text */
+    color: transparent; 
 }
 
-.glass-badge:hover::after {
+.glass-badge:hover::after,
+.glass-badge:active::after {
     transform: translate(-50%, -50%);
     opacity: 1;
     color: var(--primary-text-color);
 }
 
-.glass-badge:nth-child(2):hover {
-    transform: scale(1.1) rotate(3deg); /* Dreht andersherum */
+.glass-badge:nth-child(2):hover,
+.glass-badge:nth-child(2):active {
+    transform: scale(1.1) rotate(3deg);
     box-shadow: 0 0 15px rgba(6, 247, 224, 0.3);
 }
-/* --- Ende Badges --- */
 
+/* --- LOGIN BEREICH (ZENTRIERT) --- */
 .content-row {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    justify-content: center; /* ZENTRIERT das Login Panel */
+    align-items: center;
     padding: 0 20px;
 }
 
@@ -141,6 +183,7 @@ body {
     border: var(--glass-border);
     border-radius: 25px;
     text-align: left;
+    margin: 0 auto; /* Zur Sicherheit zentrieren */
 }
 
 .login-container h2 {
@@ -153,17 +196,17 @@ body {
     width: 100%;
     padding: 15px;
     margin-bottom: 15px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--input-bg);
     border: none;
     border-radius: 10px;
     color: var(--primary-text-color);
     font-family: inherit;
     outline: none;
-    font-size: 16px; /* Verhindert Auto-Zoom auf iPhones */
+    font-size: 16px; 
 }
 
 .login-container input::placeholder {
-    color: rgba(224, 247, 250, 0.6);
+    color: var(--placeholder-color);
 }
 
 .login-container button {
@@ -180,87 +223,10 @@ body {
 }
 
 .login-container button:hover {
-    background-color: #4d7a7a;
+    filter: brightness(1.1);
 }
 
-.settings-container {
-    display: flex;
-    align-items: flex-end;
-}
-
-.settings-button {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: var(--glass-border);
-    color: var(--primary-text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: transform 0.3s ease;
-}
-
-.settings-button:hover {
-    transform: rotate(90deg);
-}
-
-/* --- MOBILE OPTIMIERUNG --- */
-@media (max-width: 900px) {
-    .content-row {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-        padding: 0;
-    }
-
-    .login-container {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .settings-container {
-        width: 100%;
-        justify-content: center;
-        margin-top: 10px;
-    }
-}
-
-@media (max-width: 600px) {
-    .main-glass-container {
-        width: 95%;
-        padding: 25px 15px;
-        margin: 10px;
-    }
-
-    .main-title { font-size: 2em; }
-
-    .sub-nav {
-        gap: 15px;
-        font-size: 0.9em;
-        margin-bottom: 25px;
-    }
-
-    .badges-container {
-        margin-bottom: 30px;
-        gap: 10px;
-    }
-
-    .glass-badge {
-        font-size: 0.75em;
-        padding: 8px 12px;
-        min-width: 140px; /* Kleiner auf Mobile */
-    }
-    
-    .login-container {
-        padding: 20px;
-    }
-}
-/* --- SETTINGS MODAL & SWITCHES --- */
-
-/* Der dunkle Hintergrund hinter dem Fenster */
+/* --- MODAL STYLE (Bleibt gleich, nur Farben angepasst) --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -274,32 +240,34 @@ body {
     align-items: center;
     z-index: 1000;
     opacity: 0;
-    pointer-events: none; /* Klicks gehen durch, wenn unsichtbar */
+    pointer-events: none;
     transition: opacity 0.3s ease;
 }
 
-/* Wenn die Klasse nicht "hidden" ist, zeigen wir es an */
 .modal-overlay.show {
     opacity: 1;
     pointer-events: auto;
 }
 
-/* Das eigentliche Fenster */
 .glass-modal {
     width: 90%;
     max-width: 400px;
-    background: rgba(30, 30, 30, 0.85); /* Dunkler Grundton */
+    background: rgba(30, 30, 30, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 25px;
     color: white;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s ease;
 }
 
-.modal-overlay.show .glass-modal {
-    transform: scale(1);
+.modal-overlay.show .glass-modal { transform: scale(1); }
+
+/* Modal Header Anpassung für Light Mode */
+body.light-mode .glass-modal {
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
 .modal-header {
@@ -309,18 +277,12 @@ body {
     margin-bottom: 20px;
 }
 
-.modal-header h3 {
-    margin: 0;
-    font-weight: 500;
-}
-
 .close-btn {
     background: none;
     border: none;
-    color: white;
+    color: inherit; /* Nimmt Farbe vom Parent (Schwarz oder Weiss) */
     font-size: 2em;
     cursor: pointer;
-    line-height: 0.5;
 }
 
 .setting-row {
@@ -337,81 +299,34 @@ body {
     margin-bottom: 10px;
 }
 
+body.light-mode .setting-desc { color: #555; }
+
 .modal-divider {
     border: 0;
     height: 1px;
     background: rgba(255, 255, 255, 0.1);
     margin: 15px 0;
 }
+body.light-mode .modal-divider { background: rgba(0,0,0,0.1); }
 
-/* --- TOGGLE SWITCH DESIGN --- */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 26px;
-}
+/* Switch Style */
+.switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--button-color); }
+input:checked + .slider:before { transform: translateX(24px); }
 
-.switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: var(--button-color);
-}
-
-input:checked + .slider:before {
-    transform: translateX(24px);
-}
-
-/* --- LIGHT MODE VARIABLEN --- */
-/* Wenn der Body die Klasse "light-mode" hat, ändern wir die CSS-Variablen */
-body.light-mode {
-    --primary-text-color: #333333; /* Dunkle Schrift */
-    --secondary-text-color: #555555;
-    --glass-bg-color: rgba(255, 255, 255, 0.65); /* Helles, milchiges Glas */
-    --glass-border: 1px solid rgba(255, 255, 255, 0.6);
-    --button-color: #4a90e2; /* Etwas blaueres Button für Light Mode */
-    background-color: #f0f2f5; /* Fallback Hintergrundfarbe falls Video aus ist */
-}
-
-/* Im Light Mode müssen wir den Modal-Text anpassen */
-body.light-mode .glass-modal {
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    border: 1px solid rgba(0,0,0,0.1);
-}
-
-body.light-mode .close-btn {
-    color: #333;
-}
-
-body.light-mode .setting-desc {
-    color: #666;
+/* --- MOBILE QUERIES --- */
+@media (max-width: 600px) {
+    .main-glass-container {
+        width: 95%;
+        padding: 25px 15px;
+        margin-top: 80px; /* Mehr Platz oben für Settings Button */
+    }
+    
+    .settings-button {
+        top: 15px;
+        right: 15px; /* Etwas näher am Rand auf kleinen Screens */
+    }
 }

@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- LOGIN ELEMENTE ---
+    // --- ELEMENTE HOLEN ---
     const loginForm = document.getElementById("login-form");
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
 
-    // --- SETTINGS ELEMENTE ---
     const settingsBtn = document.querySelector(".settings-button");
     const modalOverlay = document.getElementById("settings-modal");
     const closeSettingsBtn = document.getElementById("close-settings");
@@ -26,25 +25,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 2. SETTINGS FENSTER ÖFFNEN / SCHLIESSEN
+    // 2. SETTINGS FENSTER (Öffnen/Schließen)
     settingsBtn.addEventListener("click", () => {
-        modalOverlay.classList.remove("hidden"); // Zur Sicherheit
+        modalOverlay.classList.remove("hidden");
         modalOverlay.classList.add("show");
     });
 
-    closeSettingsBtn.addEventListener("click", () => {
+    const closeMenu = () => {
         modalOverlay.classList.remove("show");
-        // Kleiner Timeout damit die Animation zu Ende spielt bevor wir hidden setzen (optional)
-    });
+        // Optional: Nach der Animation die Klasse 'hidden' hinzufügen (via Timeout)
+    };
 
-    // Schließen wenn man nebendran klickt
+    closeSettingsBtn.addEventListener("click", closeMenu);
+
     modalOverlay.addEventListener("click", (e) => {
         if (e.target === modalOverlay) {
-            modalOverlay.classList.remove("show");
+            closeMenu();
         }
     });
 
-    // 3. LIGHT MODE / DARK MODE SCHALTER
+    // 3. LIGHT MODE TOGGLE
     themeToggle.addEventListener("change", () => {
         if (themeToggle.checked) {
             document.body.classList.add("light-mode");
@@ -53,17 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 4. VIDEO EIN / AUS SCHALTER
+    // 4. VIDEO PAUSE/PLAY TOGGLE
     videoToggle.addEventListener("change", () => {
         if (videoToggle.checked) {
-            // Video einschalten
-            bgVideo.style.display = "block";
+            // Schalter an -> Video spielt
             bgVideo.play();
         } else {
-            // Video ausschalten
+            // Schalter aus -> Video PAUSIERT (Standbild)
             bgVideo.pause();
-            bgVideo.style.display = "none"; 
-            // Wenn Video weg ist, greift die background-color vom Body (definiert im CSS)
         }
     });
 });
