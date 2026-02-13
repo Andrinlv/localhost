@@ -2,16 +2,15 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loginpanel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login Archiv</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <video autoplay muted loop playsinline id="bg-video">
         <source src="assets/background.mp4" type="video/mp4">
-        Dein Browser unterstützt dieses Video-Format nicht.
     </video>
 
     <div class="main-glass-container">
@@ -19,32 +18,40 @@
         <div class="sub-nav">
             <span>Data</span>
             <span>Security</span>
+            <span>Access</span>
         </div>
 
         <div class="badges-container">
             <div class="glass-badge" data-fun="Wo ist meine Brille? 👓">
-                ?
+                <span class="badge-icon">?</span>
             </div> 
             <div class="glass-badge" data-fun="Sauer macht lustig! 🍋">
-                ?
+                <span class="badge-icon">?</span>
             </div>
             <div class="glass-badge" data-fun="Vorsicht, scharfe Kante! 🔪">
-                ?
+                <span class="badge-icon">?</span>
             </div>
         </div>
 
         <div class="content-row">
-            <div class="login-container">
-                <h2>Login</h2>
+            <div class="login-container" id="login-box">
+                <h2>Zugang</h2>
                 <form id="login-form">
-                    <input type="text" id="username" placeholder="Benutzername" required>
-                    <input type="password" id="password" placeholder="Passwort" required>
-                    <button type="submit">Submit</button>
+                    <div class="input-group">
+                        <input type="text" id="username" placeholder="Benutzername" required autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Passwort" required>
+                    </div>
+                    <button type="submit" id="submit-btn">
+                        <span class="btn-text">Login</span>
+                        <div class="loader"></div>
+                    </button>
                 </form>
             </div>
             
             <div class="settings-container">
-                <button class="settings-button">
+                <button class="settings-button" aria-label="Einstellungen öffnen">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -53,33 +60,36 @@
             </div>
         </div>
     </div>
-<div id="settings-modal" class="modal-overlay hidden">
+
+    <div id="settings-modal" class="modal-overlay">
         <div class="glass-modal">
             <div class="modal-header">
-                <h3>Einstellungen</h3>
+                <h3>Systemeinstellungen</h3>
                 <button id="close-settings" class="close-btn">&times;</button>
             </div>
             
             <div class="modal-content">
-                <div class="setting-row">
-                    <span>Erscheinungsbild</span>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-title">Design Modus</span>
+                        <span class="setting-desc">Light / Dark Theme</span>
+                    </div>
                     <label class="switch">
                         <input type="checkbox" id="theme-toggle">
                         <span class="slider round"></span>
                     </label>
                 </div>
-                <p class="setting-desc">Wechsle zwischen Light und Dark Mode.</p>
 
-                <hr class="modal-divider">
-
-                <div class="setting-row">
-                    <span>Hintergrund-Video</span>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-title">Hintergrund</span>
+                        <span class="setting-desc">Live Video Animation</span>
+                    </div>
                     <label class="switch">
                         <input type="checkbox" id="video-toggle" checked>
                         <span class="slider round"></span>
                     </label>
                 </div>
-                <p class="setting-desc">Video deaktivieren um Leistung zu sparen.</p>
             </div>
         </div>
     </div>
