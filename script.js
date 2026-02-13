@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Simulierter Delay für Realismus
         setTimeout(() => {
-            if (username === "Valentinesday" && password === "14.02.2026") {
+            if (username === "Valentinesday" && password === "14.02.2026" || username === "Admin" && password === "071005") {
                 // Erfolg: Weiterleitung
                 submitBtn.style.backgroundColor = "#4CAF50"; // Grün
                 submitBtn.innerHTML = "Erfolg!";
@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 setTimeout(() => {
                     window.location.href = "https://andrinlv.github.io/valentinesday/";
                 }, 500);
+
             } else {
                 // Fehler: Shake Animation & Reset
                 triggerShake();
