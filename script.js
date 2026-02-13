@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Simulierter Delay für Realismus
         setTimeout(() => {
-            if (username === "Louisa" && password === "07102005") {
+            if (username === "Valentinesday" && password === "14.02.2026") {
                 // Erfolg: Weiterleitung
                 submitBtn.style.backgroundColor = "#4CAF50"; // Grün
                 submitBtn.innerHTML = "Erfolg!";
