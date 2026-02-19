@@ -42,54 +42,112 @@ document.addEventListener("DOMContentLoaded", () => {
         badges.forEach(b => b.classList.remove('active'));
     });
 
-    // --- 2. LOGIN LOGIK MIT ANIMATION ---
-    loginForm.addEventListener("submit", (e) => {
+  // --- 2. KONTROLLZENTRUM LOGIK (LOGIN & REGISTRIERUNG) ---
+    const authForm = document.getElementById("auth-form");
+    const formTitle = document.getElementById("form-title");
+    const targetLinkGroup = document.getElementById("target-link-group");
+    const targetLinkInput = document.getElementById("target-link");
+    const toggleAuthModeBtn = document.getElementById("toggle-auth-mode");
+    const modeText = document.getElementById("mode-text");
+    
+    let isLoginMode = true; // Speichert, in welchem Modus wir uns befinden
+
+    // Initialisiere die "Datenbank" (localStorage) mit einem Standard-Benutzer, falls sie leer ist
+    if (!localStorage.getItem("app_users")) {
+        const defaultUsers = {
+            "Valentinesday": { password: "14.02.2026", redirect: "https://andrinlv.github.io/valentinesday/" }
+        };
+        localStorage.setItem("app_users", JSON.stringify(defaultUsers));
+    }
+
+    // Wechsel zwischen Login und Registrierung
+    toggleAuthModeBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        
-        const username = usernameInput.value;
-        const password = passwordInput.value;
-        
-        // Button Loading State
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.innerHTML = "Prüfung...";
-        submitBtn.style.opacity = "0.8";
+        isLoginMode = !isLoginMode; // Modus umkehren
 
-        // Simulierter Delay für Realismus
-        setTimeout(() => {
-            if (username === "Valentinesday" && password === "14.02.2026" || username === "Admin" && password === "071005") {
-                // Erfolg: Weiterleitung
-                submitBtn.style.backgroundColor = "#4CAF50"; // Grün
-                submitBtn.innerHTML = "Erfolg!";
-                if (navigator.vibrate) navigator.vibrate([50, 50, 50]); // Erfolgsvibration
-                
-                setTimeout(() => {
-                    window.location.href = "https://andrinlv.github.io/valentinesday/";
-                }, 500);
-
-            } else {
-                // Fehler: Shake Animation & Reset
-                triggerShake();
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.style.opacity = "1";
-                
-                // Fehler Vibration (Lang - Kurz - Lang)
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
-            }
-        }, 600); // 600ms warten
+        if (isLoginMode) {
+            formTitle.innerText = "Zugang";
+            targetLinkGroup.classList.add("hidden");
+            submitBtn.querySelector(".btn-text").innerText = "Login";
+            modeText.innerText = "Neuen Bereich anlegen?";
+            toggleAuthModeBtn.innerText = "Registrieren";
+            targetLinkInput.removeAttribute("required");
+        } else {
+            formTitle.innerText = "Neuen Zugang erstellen";
+            targetLinkGroup.classList.remove("hidden");
+            submitBtn.querySelector(".btn-text").innerText = "Speichern";
+            modeText.innerText = "Bereits einen Zugang?";
+            toggleAuthModeBtn.innerText = "Zum Login";
+            targetLinkInput.setAttribute("required", "true");
+        }
     });
 
-    function triggerShake() {
-        // Entfernen und neu hinzufügen der Klasse, um Animation neu zu starten
+    // Formular absenden (Login oder Registrierung verarbeiten)
+    authForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        
+        // Aktuelle Benutzer aus dem Notizbuch (localStorage) holen
+        const users = JSON.parse(localStorage.getItem("app_users"));
+
+        const originalBtnText = submitBtn.querySelector(".btn-text").innerText;
+        submitBtn.querySelector(".btn-text").innerText = isLoginMode ? "Prüfung..." : "Speichere...";
+
+        setTimeout(() => {
+            if (isLoginMode) {
+                // --- LOGIN LOGIK ---
+                if (users[username] && users[username].password === password) {
+                    submitBtn.style.backgroundColor = "#4CAF50"; 
+                    submitBtn.querySelector(".btn-text").innerText = "Erfolg!";
+                    if (navigator.vibrate) navigator.vibrate([50, 50, 50]); 
+                    
+                    // Weiterleitung zum gespeicherten Link des Users
+                    setTimeout(() => {
+                        window.location.href = users[username].redirect;
+                    }, 500);
+                } else {
+                    triggerError(originalBtnText);
+                }
+            } else {
+                // --- REGISTRIERUNGS LOGIK ---
+                if (users[username]) {
+                    alert("Diesen Benutzernamen gibt es bereits!");
+                    triggerError(originalBtnText);
+                } else {
+                    // Neuen Benutzer zum Objekt hinzufügen
+                    users[username] = {
+                        password: password,
+                        redirect: targetLinkInput.value
+                    };
+                    
+                    // Aktualisiertes Objekt wieder im localStorage speichern
+                    localStorage.setItem("app_users", JSON.stringify(users));
+                    
+                    alert(`Zugang für ${username} erfolgreich erstellt! Du kannst dich jetzt einloggen.`);
+                    
+                    // Formular zurücksetzen und in den Login-Modus wechseln
+                    authForm.reset();
+                    toggleAuthModeBtn.click(); 
+                }
+            }
+        }, 600);
+    });
+
+    function triggerError(originalText) {
+        // Die gleiche Shake-Funktion wie zuvor
         loginBox.classList.remove("shake-horizontal");
-        // Force Reflow (Hack damit der Browser merkt dass die Klasse weg war)
         void loginBox.offsetWidth; 
         loginBox.classList.add("shake-horizontal");
         
-        // Input rot markieren
         usernameInput.style.borderColor = "#ff5252";
         passwordInput.style.borderColor = "#ff5252";
+        
+        submitBtn.querySelector(".btn-text").innerText = originalText;
 
-        // Nach 2 sekunden Rot entfernen
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
+
         setTimeout(() => {
             loginBox.classList.remove("shake-horizontal");
             usernameInput.style.borderColor = "";
