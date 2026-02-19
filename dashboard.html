@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Center</title>
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="dashboard.css"> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="assets/background.mp4" type="video/mp4">
+    </video>
+
+    <div class="dashboard-glass-container">
+        <aside class="sidebar">
+            <h2 class="brand">Admin Panel</h2>
+            <ul class="nav-links">
+                <li class="active"><a href="#" id="nav-overview">Übersicht</a></li>
+                <li><a href="#" id="nav-users">Benutzer</a></li>
+                <li><a href="#" id="nav-logs">System-Logs</a></li>
+                <li><a href="#" id="logout-btn" class="logout">Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Willkommen zurück, <span id="admin-name">Admin</span></h1>
+                <p>Systemstatus: <span class="status-online">Online</span></p>
+            </header>
+
+            <section id="view-overview" class="view-section active">
+                <div class="dashboard-widgets">
+                    <div class="widget glass-panel">
+                        <h3>Registrierte Zugänge</h3>
+                        <p class="big-number" id="user-count">0</p>
+                    </div>
+                    <div class="widget glass-panel span-2">
+                        <h3>Aktuelle Archiv-Nutzer</h3>
+                        <ul class="user-list" id="user-list-container"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-users" class="view-section hidden">
+                <div class="glass-panel">
+                    <div class="section-header">
+                        <h2>Benutzerverwaltung</h2>
+                        <div class="sort-controls">
+                            <button id="sort-az" class="sort-btn active">A-Z</button>
+                            <button id="sort-time" class="sort-btn">Zuletzt Online</button>
+                        </div>
+                    </div>
+                    <ul class="user-list" id="full-user-list">
+                        </ul>
+                </div>
+            </section>
+
+            <section id="view-logs" class="view-section hidden">
+                <div class="glass-panel">
+                    <h2>System-Protokoll</h2>
+                    <ul class="log-list" id="log-list-container">
+                        </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

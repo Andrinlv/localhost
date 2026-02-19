@@ -1,5 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
+    // --- HILFSFUNKTION FÜR SYSTEM-LOGS ---
+    function writeLog(actionMessage) {
+        const logs = JSON.parse(localStorage.getItem("app_logs")) || [];
+        // Neuen Log ganz oben in die Liste einfügen
+        logs.unshift({
+            message: actionMessage,
+            timestamp: new Date().getTime() // Speichert die aktuelle Zeit auf die Millisekunde genau
+        });
+        // Speichern (wir behalten nur die letzten 50, damit der Speicher nicht platzt)
+        localStorage.setItem("app_logs", JSON.stringify(logs.slice(0, 50)));
+    }
+
     // --- ELEMENTE ---
     const loginBox = document.getElementById("login-box");
     const loginForm = document.getElementById("login-form");
@@ -18,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 1. HAPTIK & BADGE LOGIK (MOBILE) ---
     badges.forEach(badge => {
-        badge.addEventListener('click', function(e) {
+        badge.addEventListener('click', function (e) {
             // Verhindern, dass Klicks durchschlagen
             e.stopPropagation();
 
@@ -32,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             badges.forEach(b => {
                 if (b !== this) b.classList.remove('active');
             });
-            
+
             this.classList.toggle('active');
         });
     });
@@ -42,14 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
         badges.forEach(b => b.classList.remove('active'));
     });
 
-  // --- 2. KONTROLLZENTRUM LOGIK (LOGIN & REGISTRIERUNG) ---
+    // --- 2. KONTROLLZENTRUM LOGIK (LOGIN & REGISTRIERUNG) ---
     const authForm = document.getElementById("auth-form");
     const formTitle = document.getElementById("form-title");
     const targetLinkGroup = document.getElementById("target-link-group");
     const targetLinkInput = document.getElementById("target-link");
     const toggleAuthModeBtn = document.getElementById("toggle-auth-mode");
     const modeText = document.getElementById("mode-text");
-    
+
     let isLoginMode = true; // Speichert, in welchem Modus wir uns befinden
 
     // Initialisiere die "Datenbank" (localStorage) mit einem Standard-Benutzer, falls sie leer ist
@@ -85,10 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Formular absenden (Login oder Registrierung verarbeiten)
     authForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        
+
         const username = usernameInput.value.trim();
         const password = passwordInput.value;
-        
+
         // Aktuelle Benutzer aus dem Notizbuch (localStorage) holen
         const users = JSON.parse(localStorage.getItem("app_users"));
 
@@ -99,14 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isLoginMode) {
                 // --- LOGIN LOGIK ---
                 if (users[username] && users[username].password === password) {
-                    submitBtn.style.backgroundColor = "#4CAF50"; 
+                    submitBtn.style.backgroundColor = "#4CAF50";
                     submitBtn.querySelector(".btn-text").innerText = "Erfolg!";
-                    if (navigator.vibrate) navigator.vibrate([50, 50, 50]); 
-                    
-                    // Weiterleitung zum gespeicherten Link des Users
-                    setTimeout(() => {
-                        window.location.href = users[username].redirect;
-                    }, 500);
+                    if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+
+                    users[username].lastLogin = new Date().getTime(); // Speichert die Login-Zeit
+                    localStorage.setItem("app_users", JSON.stringify(users));
+                    writeLog(`Login: ${username} hat sich angemeldet.`);
+
+                    if (username === "Admin") {
+                        sessionStorage.setItem("admin_logged_in", "true");
+                        sessionStorage.setItem("cureent_user", username);
+                        setTimeout(() => {
+                            window.location.href = "dashboard.html"; // zum Dashboard
+                        }, 500);
+                    } else {
+                        // Weiterleitung zum gespeicherten Link des Users
+                        setTimeout(() => {
+                            window.location.href = users[username].redirect;
+                        }, 500);
+                    }
                 } else {
                     triggerError(originalBtnText);
                 }
@@ -121,15 +145,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         password: password,
                         redirect: targetLinkInput.value
                     };
-                    
+
                     // Aktualisiertes Objekt wieder im localStorage speichern
                     localStorage.setItem("app_users", JSON.stringify(users));
-                    
+
+                    writeLog(`System: Neuer Zugang für ${username} erstellt.`);
+
                     alert(`Zugang für ${username} erfolgreich erstellt! Du kannst dich jetzt einloggen.`);
-                    
+
                     // Formular zurücksetzen und in den Login-Modus wechseln
                     authForm.reset();
-                    toggleAuthModeBtn.click(); 
+                    toggleAuthModeBtn.click();
                 }
             }
         }, 600);
@@ -138,15 +164,15 @@ document.addEventListener("DOMContentLoaded", () => {
     function triggerError(originalText) {
         // Die gleiche Shake-Funktion wie zuvor
         loginBox.classList.remove("shake-horizontal");
-        void loginBox.offsetWidth; 
+        void loginBox.offsetWidth;
         loginBox.classList.add("shake-horizontal");
-        
+
         usernameInput.style.borderColor = "#ff5252";
         passwordInput.style.borderColor = "#ff5252";
-        
+
         submitBtn.querySelector(".btn-text").innerText = originalText;
 
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
         setTimeout(() => {
             loginBox.classList.remove("shake-horizontal");
@@ -165,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function closeModal() {
         modalOverlay.classList.remove("show");
         setTimeout(() => {
-           // modalOverlay.classList.add("hidden"); // Optional
+            // modalOverlay.classList.add("hidden"); // Optional
         }, 300);
     }
 
@@ -189,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             bgVideo.play();
         } else {
             bgVideo.pause();
-            bgVideo.style.display = "none"; 
+            bgVideo.style.display = "none";
         }
         if (navigator.vibrate) navigator.vibrate(20);
     });
