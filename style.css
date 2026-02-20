@@ -97,56 +97,70 @@ body {
     backdrop-filter: blur(5px);
     position: relative;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Deine Kurve ist super, wir behalten sie für den Pop-Effekt */
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     min-width: 60px;
     height: 50px;
-    display: flex;
+    display: inline-flex; /* Wichtig für automatische Breite */
     align-items: center;
     justify-content: center;
     user-select: none;
+    overflow: hidden; /* Verhindert Text-Flackern außerhalb der Box */
 }
 
 .badge-icon {
     font-weight: bold;
     font-size: 1.2rem;
-    transition: opacity 0.2s;
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 /* Der geheime Text */
 .glass-badge::after {
     content: attr(data-fun);
-    position: absolute;
-    width: max-content;
-    padding: 0 10px;
+    position: absolute; /* Standardmäßig absolut, um keinen Platz wegzunehmen */
+    white-space: nowrap;
     opacity: 0;
     font-weight: 500;
     font-size: 0.85rem;
     color: #fff;
-    transform: scale(0.8);
+    transform: scale(0.5);
     transition: all 0.3s ease;
     pointer-events: none;
 }
 
-/* Status: Aktiv (Klick auf Mobile oder Hover auf Desktop) */
+/* Status: Aktiv (Klick oder Hover) */
 .glass-badge.active,
 .glass-badge:hover {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-    min-width: 200px; /* Erweitert sich */
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    
+    /* Der "Pop" nach vorne */
+    transform: scale(1.1) translateY(-2px);
+    
+    /* Dynamische Breite ermöglichen */
+    min-width: 100px; /* Nur ein kleiner Basiswert */
+    padding: 12px 30px; 
 }
 
+/* Icon verschwindet und macht Platz */
 .glass-badge.active .badge-icon,
 .glass-badge:hover .badge-icon {
-    opacity: 0; /* Icon ausblenden */
+    opacity: 0;
+    transform: scale(0);
+    width: 0; /* Nimmt keinen Platz mehr weg */
+    margin: 0;
 }
 
+/* Text wird zum Hauptinhalt */
 .glass-badge.active::after,
 .glass-badge:hover::after {
+    position: relative; /* Ändert Positionierung, damit die Box sich dehnt! */
     opacity: 1;
     transform: scale(1);
-    color: var(--primary-text-color);
+    color: var(--primary-text-color, #fff);
+    padding: 0 5px;
 }
 
 /* --- LOGIN AREA --- */
